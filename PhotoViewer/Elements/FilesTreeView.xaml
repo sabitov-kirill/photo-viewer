@@ -1,0 +1,60 @@
+﻿<UserControl
+    x:Class="PhotoViewer.Elements.FilesTreeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:local="using:PhotoViewer.Elements"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    >
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="TreeViewFolderDataTemplate" x:DataType="local:FilesTreeItem">
+            <muxc:TreeViewItem ItemsSource="{x:Bind Children}" HasUnrealizedChildren="True" IsExpanded="{x:Bind IsExpanded}">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Folder" Margin="5, 0, 5, 0"/>
+                    <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </muxc:TreeViewItem>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TreeViewPhotoDataTemplate" x:DataType="local:FilesTreeItem">
+            <muxc:TreeViewItem
+                PointerEntered="filesTreeViewItem_PointerEntered" 
+                PointerExited="filesTreeViewItem_PointerExited"
+                >
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Pictures" Margin="5, 0, 5, 0"/>
+                    <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </muxc:TreeViewItem>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TreeViewUnknownDataTemplate" x:DataType="local:FilesTreeItem">
+            <muxc:TreeViewItem>
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Page2" Margin="5, 0, 5, 0"/>
+                    <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </muxc:TreeViewItem>
+        </DataTemplate>
+
+        <local:FilesTreeItemTemplateSelector
+            x:Name="FilesTreeItemTemplateSelector"
+            TreeViewFolderDataTemplate="{StaticResource TreeViewFolderDataTemplate}"
+            TreeViewPhotoDataTemplate="{StaticResource TreeViewPhotoDataTemplate}"
+            TreeViewUnknownDataTemplate="{StaticResource TreeViewUnknownDataTemplate}"
+            />
+    </UserControl.Resources>
+    <muxc:TreeView
+        x:Name="filesTreeView"
+        ItemTemplateSelector="{StaticResource FilesTreeItemTemplateSelector}"
+        ItemsSource="{x:Bind FileTreeDataSource}"
+        Expanding="filesTreeView_Expanding"
+        ItemInvoked="filesTreeView_ItemInvoked"
+        CanDragItems="False"
+        AllowDrop="False"
+        ScrollViewer.HorizontalScrollBarVisibility="Visible"
+        />
+</UserControl>

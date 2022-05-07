@@ -1,0 +1,196 @@
+﻿<UserControl
+    x:Class="PhotoViewer.Elements.MenuBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:PhotoViewer.Elements"
+    mc:Ignorable="d"
+    x:DefaultBindMode="OneWay"
+    >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <AcrylicBrush x:Key="NavbarAcrilicBrush"
+                BackgroundSource="HostBackdrop"
+                TintColor="{ThemeResource SystemAccentColorDark3}"
+                TintOpacity="0.7"
+                TintLuminosityOpacity="0.8"
+                FallbackColor="{ThemeResource SystemAccentColorDark2}"
+                />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid
+        Width="{x:Bind MaximizedWidth}"
+        CornerRadius="6"
+        Background="{StaticResource NavbarAcrilicBrush}"
+        Padding="0"
+        Margin="0"
+        >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{x:Bind GetGridLength(MaximizedWidth)}" MaxHeight="250"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <!-- Menu Size Change Button -->
+        <StackPanel
+            Grid.Row="0"
+            x:Name="menuButtonSelect"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            BorderBrush="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
+            BorderThickness="0 0 0 1"
+            Padding="5"
+            >
+            <Grid Width="{x:Bind MaximizedWidth}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Size Changing Button -->
+                <Button
+                    Width="48"
+                    x:Name="menuBarTogleButton"
+                    Click="menuBarTogleButton_Click"
+                    BorderBrush="Transparent"
+                    Background="Transparent"
+                    HorizontalAlignment="Left"
+                    Margin="0"
+                    >
+                    <muxc:AnimatedIcon>
+                        <muxc:AnimatedIcon.Source>
+                            <animatedvisuals:AnimatedGlobalNavigationButtonVisualSource/>
+                        </muxc:AnimatedIcon.Source>
+                        <muxc:AnimatedIcon.FallbackIconSource>
+                            <muxc:SymbolIconSource Symbol="GlobalNavigationButton"/>
+                        </muxc:AnimatedIcon.FallbackIconSource>
+                    </muxc:AnimatedIcon>
+                </Button>
+                <TextBlock
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    FontSize="25"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="5, 0"
+                    >
+                    Photo Viewer
+                </TextBlock>
+            </Grid>
+        </StackPanel>
+
+        <!-- Changing Files Tree View Root Folder -->
+        <StackPanel x:Name="fielsTreeSearch" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Padding="0, 5" VerticalAlignment="Top" Height="42">
+                <Button
+                    Click="filesTreeBackButton_Click"
+                    BorderBrush="Transparent"
+                    Background="Transparent"
+                    HorizontalAlignment="Left"
+                    Width="48"
+                    Margin="5, 0"
+                    >
+                    <muxc:AnimatedIcon>
+                        <muxc:AnimatedIcon.Source>
+                            <animatedvisuals:AnimatedBackVisualSource/>
+                        </muxc:AnimatedIcon.Source>
+                        <muxc:AnimatedIcon.FallbackIconSource>
+                            <muxc:SymbolIconSource Symbol="Back"/>
+                        </muxc:AnimatedIcon.FallbackIconSource>
+                    </muxc:AnimatedIcon>
+                </Button>
+                <TextBox
+                    PlaceholderText="Tree View Path"
+                    KeyDown="rootFolderPath_KeyDown"
+                    LosingFocus="TextBox_LosingFocus"
+                    Width="{x:Bind GetChengeRootFolderTextBoxSize(MaximizedWidth)}"
+                    />
+            </StackPanel>
+            <muxc:InfoBar
+                x:Name="fielsTreeSearchError"
+                IsOpen="False"
+                Severity="Error"
+                Title="Error"
+                Message="Wrong path was given."
+                />
+        </StackPanel>
+
+        <!-- Files Tree View -->
+        <local:FilesTreeView
+            Grid.Row="2"
+            x:Name="filesTreeView"
+            RootFolderPath="{x:Bind RootFolder}"
+            FilePreviewStarted="filesTreeView_FilePreviewStarted"
+            FilePreviewEnded="filesTreeView_FilePreviewEnded"
+            FileSelected="filesTreeView_FileSelected"
+            />
+
+        <!-- File Tree Item Preview -->
+        <Viewbox
+            Grid.Row="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Stretch="Uniform" StretchDirection="DownOnly"
+            Margin="5"
+            >
+            <StackPanel CornerRadius="7">
+                <Image x:Name="filePreview"/>
+            </StackPanel>
+        </Viewbox>
+
+        <!-- Setting Button -->
+        <ToggleButton
+            x:Name="settingToggle"
+            Click="ToggleButton_Click"
+            Grid.Row="4"
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            Margin="5"
+            Padding="0"
+            >
+            <Grid Width="{x:Bind MaximizedWidth}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Width="48"
+                    Height="48"
+                    BorderBrush="Transparent"
+                    Background="Transparent"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Padding="10"
+                    Margin="0"
+                    >
+                    <muxc:AnimatedIcon>
+                        <muxc:AnimatedIcon.Source>
+                            <animatedvisuals:AnimatedSettingsVisualSource/>
+                        </muxc:AnimatedIcon.Source>
+                        <muxc:AnimatedIcon.FallbackIconSource>
+                            <muxc:SymbolIconSource Symbol="GlobalNavigationButton"/>
+                        </muxc:AnimatedIcon.FallbackIconSource>
+                    </muxc:AnimatedIcon>
+                </StackPanel>
+                
+                <TextBlock
+                    Style="{ThemeResource HeaderTextBlockStyle}"
+                    FontSize="20"
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    >
+                    Settings
+                </TextBlock>
+            </Grid>
+        </ToggleButton>
+    </Grid>
+</UserControl>

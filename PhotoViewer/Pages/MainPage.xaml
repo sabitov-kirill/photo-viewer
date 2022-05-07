@@ -1,0 +1,82 @@
+﻿<Page
+    x:Class="PhotoViewer.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:elements="using:PhotoViewer.Elements"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    x:DefaultBindMode="OneWay">
+
+    <Grid Padding="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="menuBarColumn" Width="{x:Bind GetGridLength(MaximizedWidth.Content)}"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Navigation menu with tree view -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <AcrylicBrush x:Key="NavbarAcrilicBrush"
+                BackgroundSource="HostBackdrop"
+                TintColor="{ThemeResource SystemAccentColorDark3}"
+                TintOpacity="0.7"
+                TintLuminosityOpacity="0.8"
+                FallbackColor="{ThemeResource SystemAccentColorDark2}"
+                />
+                </ResourceDictionary>
+            </Grid.Resources>
+
+            <elements:MenuBar
+                Grid.Row="0"
+                x:Name="filesMenuBar"
+                SizeToggleClicked="filesMenuBar_OnSizeToggleClicked"
+                FileSelected="filesMenuBar_FileSelected"
+                SettingsToggled="filesMenuBar_SettingsToggled"
+                MaximizedWidth="{x:Bind MaximizedWidth.Content}"
+                MinimizedWidth="{x:Bind MinimizedWidth}"
+                />
+
+            <StackPanel
+                x:Name="settingsPanel"
+                Visibility="Collapsed"
+                Grid.Row="1"
+                Background="{StaticResource NavbarAcrilicBrush}"
+                CornerRadius="5"
+                Margin="0,5,0,0"
+                Padding="5, 2"
+                >
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" HorizontalAlignment="Left">Menu Width</TextBlock>
+                <Slider
+                    Value="{x:Bind MaximizedWidth.Content, Mode=TwoWay}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Minimum="220" Maximum="500"
+                    Width="210"
+                    />
+            </StackPanel>
+        </Grid>
+
+        <!-- Main View -->
+        <Viewbox
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Stretch="Uniform" StretchDirection="DownOnly"
+            Margin="5"
+            >
+            <StackPanel CornerRadius="5">
+                <Image x:Name="fileConent"/>
+            </StackPanel>
+        </Viewbox>
+    </Grid>
+</Page>
