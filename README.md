@@ -1,5 +1,5 @@
 # PhotoViewer
-A program in the process of creating which the author received new knowledge.
+No practical use. The program was created for educational purposes
 The simplest photo viewer for windows based on Microsoft WinUI 2 SDK.
 
 ## Application features:
